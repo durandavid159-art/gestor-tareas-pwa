@@ -1,161 +1,136 @@
 import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebaseConfig";
 import Swal from "sweetalert2";
 import "../styles/Auth.css";
 
 export const Login = () => {
-    // Estado para alternar entre Login (true) y Registro (false)
-    const [isLogin, setIsLogin] = useState(true);
 
-    // Estados para los campos del formulario
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
 
-    // Manejador del envío del formulario
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleLogin = async () => {
 
-        // Validación básica de campos vacíos
         if (!email || !password) {
+
             Swal.fire({
-                icon: "error",
-                title: "Campos incompletos",
-                text: "Por favor, completa todos los campos obligatorios.",
-                confirmButtonColor: "#3085d6",
+                icon: "warning",
+                title: "Campos obligatorios",
+                text: "Debes ingresar tu correo y contraseña."
             });
+
             return;
         }
 
-        if (isLogin) {
-            // --- LÓGICA PARA HU 1.1: INICIO DE SESIÓN ---
-            console.log("Iniciando sesión con:", { email, password });
+        try {
+
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
 
             Swal.fire({
                 icon: "success",
-                title: "¡Bienvenido de nuevo!",
-                text: "Sesión iniciada correctamente.",
-                timer: 1500,
-                showConfirmButton: false,
+                title: "Bienvenido",
+                text: "Inicio de sesión exitoso."
             });
-            // Aquí redirigirías al Dashboard usando tu router (ej. useNavigate)
-        } else {
-            // --- LÓGICA PARA HU 1.1: REGISTRO ---
-            if (password !== confirmPassword) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error de validación",
-                    text: "Las contraseñas no coinciden.",
-                    confirmButtonColor: "#d33",
-                });
-                return;
-            }
 
-            console.log("Registrando usuario:", { email, password });
+            console.log("Usuario autenticado correctamente.");
+
+        } catch (error) {
+
+            console.error(error);
 
             Swal.fire({
-                icon: "success",
-                title: "¡Cuenta creada!",
-                text: "Tu registro se ha completado con éxito.",
-                confirmButtonColor: "#3085d6",
-            }).then(() => {
-                // Al registrarse con éxito, lo pasamos al login automáticamente
-                setIsLogin(true);
-                setConfirmPassword("");
+                icon: "error",
+                title: "Error",
+                text: "Correo o contraseña incorrectos."
             });
+
         }
-    };
 
-    // Simulación de autenticación alternativa (HU 1.1)
-    const handleGoogleLogin = () => {
-        console.log("Iniciando sesión con Google...");
-        Swal.fire({
-            icon: "info",
-            title: "Autenticación con Google",
-            text: "Conectando con el servicio externo...",
-            timer: 1200,
-            showConfirmButton: false,
-        });
     };
 
     return (
+
         <div className="auth-container">
-            {/* Tarjeta con efecto Glassmorphism */}
-            <div className="glass-card">
-                <h2>Gestor de Tareas</h2>
-                <h3>{isLogin ? "Iniciar Sesión" : "Crear Cuenta"}</h3>
 
-                <form onSubmit={handleSubmit} className="auth-form">
-                    <div className="form-group">
-                        <label htmlFor="email">Correo Electrónico</label>
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="ejemplo@correo.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
+            <div className="glass-card auth-card">
 
-                    <div className="form-group">
-                        <label htmlFor="password">Contraseña</label>
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="********"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
+                <h1 className="auth-title">
+                    Gestor de Tareas
+                </h1>
 
-                    {/* Campo extra si el usuario está en la vista de Registro */}
-                    {!isLogin && (
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">Confirmar Contraseña</label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                placeholder="********"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                    )}
+                <form
+                    className="auth-form"
+                    onSubmit={(e) => e.preventDefault()}
+                >
+                    {}
 
-                    <button type="submit" className="btn-primary">
-                        {isLogin ? "Iniciar Sesión" : "Registrarse"}
+                    <label>
+                        Correo Electrónico
+                    </label>
+
+                    <input
+                        type="email"
+                        placeholder="correo@ejemplo.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+
+                    {}
+
+                    <label>
+                        Contraseña
+                    </label>
+
+                    <input
+                        type="password"
+                        placeholder="********"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    {}
+
+                    <button
+                        type="button"
+                        className="btn-primary"
+                        onClick={handleLogin}
+                    >
+                        Iniciar Sesión
                     </button>
+
+                    {}
+
+                    <button
+                        type="button"
+                        className="btn-secondary"
+                    >
+                        Continuar con Google
+                    </button>
+
                 </form>
 
-                {/* Botón de Google solicitado en los componentes */}
-                <button onClick={handleGoogleLogin} className="btn-google">
-                    Continuar con Google
-                </button>
+                {}
 
-                {/* Enlaces de navegación interna */}
                 <div className="auth-links">
-                    <p>
-                        {isLogin ? "¿No tienes cuenta? " : "¿Ya tienes cuenta? "}
-                        <span
-                            className="toggle-link"
-                            onClick={() => {
-                                setIsLogin(!isLogin);
-                                setConfirmPassword("");
-                            }}
-                        >
-                            {isLogin ? "Crear Cuenta" : "Iniciar Sesión"}
-                        </span>
-                    </p>
 
-                    {isLogin && (
-                        <span className="forgot-link">
-                            ¿Olvidaste tu contraseña?
-                        </span>
-                    )}
+                    <a href="#">
+                        Crear Cuenta
+                    </a>
+
+                    <a href="#">
+                        Recuperar Contraseña
+                    </a>
+
                 </div>
+
             </div>
+
         </div>
+
     );
+
 };
