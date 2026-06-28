@@ -24,27 +24,6 @@ export const AuthProvider = ({ children }) => {
             {!loading && children}
         </AuthContext.Provider>
     );
-
-    /*temporal*/
-    onAuthStateChanged(auth, (user) => {
-
-    console.log("Usuario autenticado:");
-    console.log(user);
-
-    setCurrentUser(user);
-    setLoading(false);
-    });
-
-    /*Temporal*/
-    onAuthStateChanged(auth, (user) => {
-
-        console.log("Usuario autenticado:");
-        console.log(user);
-
-        setCurrentUser(user);
-        setLoading(false);
-    });
-
 };
 
 export const useAuth = () => useContext(AuthContext);

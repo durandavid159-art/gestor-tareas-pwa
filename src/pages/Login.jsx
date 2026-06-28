@@ -1,13 +1,37 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
+import { googleProvider } from "../services/firebaseConfig";
 import { auth } from "../services/firebaseConfig";
 import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Auth.css";
 
 export const Login = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const handleGoogleLogin = async () => {
+
+        try {
+
+            await signInWithPopup(
+                auth,
+                googleProvider
+            );
+
+            navigate("/dashboard");
+
+        } catch (error) {
+
+            Swal.fire({
+                icon: "error",
+                title: "Error Google Login"
+            });
+        }
+    };
 
     const handleLogin = async () => {
 
@@ -35,6 +59,8 @@ export const Login = () => {
                 title: "Bienvenido",
                 text: "Inicio de sesión exitoso."
             });
+
+            navigate("/dashboard");
 
             console.log("Usuario autenticado correctamente.");
 
@@ -103,10 +129,10 @@ export const Login = () => {
                     </button>
 
                     {}
-
                     <button
                         type="button"
                         className="btn-secondary"
+                        onClick={handleGoogleLogin}
                     >
                         Continuar con Google
                     </button>
@@ -116,15 +142,13 @@ export const Login = () => {
                 {}
 
                 <div className="auth-links">
-
-                    <a href="#">
+                    <Link to="/register">
                         Crear Cuenta
-                    </a>
+                    </Link>
 
-                    <a href="#">
+                    <Link to="/password">
                         Recuperar Contraseña
-                    </a>
-
+                    </Link>
                 </div>
 
             </div>
