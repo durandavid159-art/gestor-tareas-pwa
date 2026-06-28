@@ -1,13 +1,16 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { CommentSection } from "./CommentSection"
+import { TimerDisplay } from "./TimerDisplay"
 
 export const TaskAccordion = ({
     task,
     onDelete,
     onArchive,
     onUpdate,
-    onAddComment
+    onAddComment,
+    onStartTimer,
+    onPauseTimer
 }) => {
 
     const [open, setOpen] =
@@ -177,6 +180,32 @@ export const TaskAccordion = ({
                                         Estado:
                                         {" "}
                                         {task.status}
+
+                                        <TimerDisplay task={task} />
+                                        {
+                                            task.timerRunning
+                                            ? (
+                                                <button
+                                                className="btn-secondary"
+                                                onClick={() =>
+                                                    onPauseTimer(task.id)
+                                                }
+                                                >
+                                                Pausar
+                                                </button>
+                                            )
+                                            : (
+                                                <button
+                                                className="btn-primary"
+                                                onClick={() =>
+                                                    onStartTimer(task.id)
+                                                }
+                                                >
+                                                Iniciar
+                                                </button>
+                                            )
+                                        }
+                                        
                                     </p>
 
                                     <hr />

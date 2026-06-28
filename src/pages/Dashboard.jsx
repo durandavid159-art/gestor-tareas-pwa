@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import "../styles/Auth.css"
 
 export const Dashboard = () => {
-    const { tasks, addTask, updateTask, deleteTask, archiveTask, addComment } = useTasks();
+    const { tasks, addTask, updateTask, deleteTask, archiveTask, addComment, startTimer, pauseTimer} = useTasks();
     const activeTasks = tasks.filter(task => !task.archived);
 
     const handleCreate = () => {
@@ -77,6 +77,8 @@ export const Dashboard = () => {
                         onArchive={handleArchive}
                         onUpdate={updateTask}
                         onAddComment={addComment}
+                        onStartTimer={startTimer}
+                        onPauseTimer={pauseTimer}
                     />
 
                 ))

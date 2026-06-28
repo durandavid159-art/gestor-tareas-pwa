@@ -27,11 +27,7 @@ export const useTasks = () => {
 
     const addTask = async (task) => {
 
-        const tasksRef =
-            collection(
-                db,
-                `users/${currentUser.uid}/tasks`
-            );
+        const tasksRef = collection(db,`users/${currentUser.uid}/tasks`);
 
         await addDoc(tasksRef, {
 
@@ -39,13 +35,12 @@ export const useTasks = () => {
 
             title: task.title,
 
-            description:
-                task.description || "",
-
-            estimatedTime:
-                task.estimatedTime || 0,
+            description: task.description || "", 
+            estimatedTime: task.estimatedTime || 0,
 
             timeSpent: 0,
+            timerRunning: false,
+            startedAt: null,
 
             comments: [],
 
@@ -85,18 +80,42 @@ export const useTasks = () => {
     });
     };
 
-    const addComment = async (
-    taskId,
-    commentText
-) => {
+    const addComment = async (taskId, commentText) => {
 
-    const task =
-        tasks.find(
-            task =>
-                task.id === taskId
+        const task =
+            tasks.find(
+                task =>
+                    task.id === taskId
+            );
+
+        if (!task) return;
+
+        const taskRef = doc(
+            db,
+            `users/${currentUser.uid}/tasks`,
+            taskId
         );
 
-    if (!task) return;
+        const newComment = {
+
+            id: crypto.randomUUID(),
+
+            text: commentText,
+
+            createdAt:
+                new Date().toISOString()
+        };
+
+        await updateDoc(taskRef, {
+
+            comments: [
+                ...(task.comments || []),
+                newComment
+            ]
+        });
+    };
+
+    const startTimer = async (taskId) => {
 
     const taskRef = doc(
         db,
@@ -104,24 +123,52 @@ export const useTasks = () => {
         taskId
     );
 
-    const newComment = {
-
-        id: crypto.randomUUID(),
-
-        text: commentText,
-
-        createdAt:
-            new Date().toISOString()
-    };
-
     await updateDoc(taskRef, {
 
-        comments: [
-            ...(task.comments || []),
-            newComment
-        ]
-    });
-};
+        timerRunning: true,
 
-    return { tasks, addTask, updateTask, deleteTask, archiveTask, addComment };
+        startedAt:
+            new Date().toISOString()
+    });
+    };
+
+    const pauseTimer = async (taskId) => {
+
+        const task =
+            tasks.find(
+                task =>
+                    task.id === taskId
+            );
+
+        if (!task) return;
+
+        const now = new Date();
+
+        const started =
+            new Date(task.startedAt);
+
+        const elapsedSeconds =
+            Math.floor(
+                (now - started) / 1000
+            );
+
+        const taskRef = doc(
+            db,
+            `users/${currentUser.uid}/tasks`,
+            taskId
+        );
+
+        await updateDoc(taskRef, {
+
+            timerRunning: false,
+
+            startedAt: null,
+
+            timeSpent:
+                (task.timeSpent || 0)
+                + elapsedSeconds
+        });
+    };
+
+    return { tasks, addTask, updateTask, deleteTask, archiveTask, addComment, startTimer, pauseTimer};
 };
