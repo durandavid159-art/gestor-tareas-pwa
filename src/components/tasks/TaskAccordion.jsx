@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { CommentSection } from "./CommentSection"
 
 export const TaskAccordion = ({
     task,
     onDelete,
     onArchive,
-    onUpdate
+    onUpdate,
+    onAddComment
 }) => {
 
     const [open, setOpen] =
@@ -177,6 +179,18 @@ export const TaskAccordion = ({
                                         {task.status}
                                     </p>
 
+                                    <hr />
+
+                                    <CommentSection
+                                    comments={task.comments}
+                                        onAddComment={(comment) =>
+                                            onAddComment(
+                                                task.id,
+                                                comment
+                                            )
+                                    }
+                                    />
+                                    
                                     <button
                                         className="btn-secondary"
                                         onClick={() =>

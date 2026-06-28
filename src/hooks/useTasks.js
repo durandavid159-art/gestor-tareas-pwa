@@ -47,6 +47,8 @@ export const useTasks = () => {
 
             timeSpent: 0,
 
+            comments: [],
+
             status: "pending",
 
             archived: false,
@@ -83,5 +85,43 @@ export const useTasks = () => {
     });
     };
 
-    return { tasks, addTask, updateTask, deleteTask, archiveTask };
+    const addComment = async (
+    taskId,
+    commentText
+) => {
+
+    const task =
+        tasks.find(
+            task =>
+                task.id === taskId
+        );
+
+    if (!task) return;
+
+    const taskRef = doc(
+        db,
+        `users/${currentUser.uid}/tasks`,
+        taskId
+    );
+
+    const newComment = {
+
+        id: crypto.randomUUID(),
+
+        text: commentText,
+
+        createdAt:
+            new Date().toISOString()
+    };
+
+    await updateDoc(taskRef, {
+
+        comments: [
+            ...(task.comments || []),
+            newComment
+        ]
+    });
+};
+
+    return { tasks, addTask, updateTask, deleteTask, archiveTask, addComment };
 };

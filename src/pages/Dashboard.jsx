@@ -1,11 +1,12 @@
 import { useTasks } from '../hooks/useTasks';
 import {TaskForm} from '../components/tasks/TaskForm'
 import {TaskAccordion} from '../components/tasks/TaskAccordion'
+import { CommentSection } from '../components/tasks/CommentSection'
 import Swal from 'sweetalert2';
 import "../styles/Auth.css"
 
 export const Dashboard = () => {
-    const { tasks, addTask, updateTask, deleteTask, archiveTask } = useTasks();
+    const { tasks, addTask, updateTask, deleteTask, archiveTask, addComment } = useTasks();
     const activeTasks = tasks.filter(task => !task.archived);
 
     const handleCreate = () => {
@@ -75,6 +76,7 @@ export const Dashboard = () => {
                         onDelete={handleDelete}
                         onArchive={handleArchive}
                         onUpdate={updateTask}
+                        onAddComment={addComment}
                     />
 
                 ))
