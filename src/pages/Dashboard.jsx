@@ -2,11 +2,13 @@ import { useTasks } from '../hooks/useTasks';
 import {TaskForm} from '../components/tasks/TaskForm'
 import {TaskAccordion} from '../components/tasks/TaskAccordion'
 import { CommentSection } from '../components/tasks/CommentSection'
+import {ProductivitySummary} from '../components/reports/ProductivitySummary'
+import {ProductivityCards} from '../components/reports/ProductivityCards'
 import Swal from 'sweetalert2';
 import "../styles/Auth.css"
 
 export const Dashboard = () => {
-    const { tasks, addTask, updateTask, deleteTask, archiveTask, addComment, startTimer, pauseTimer, addAttachment} = useTasks();
+    const { tasks, addTask, updateTask, deleteTask, archiveTask, addComment, startTimer, pauseTimer, addAttachment, toggleTaskStatus} = useTasks();
     const activeTasks = tasks.filter(task => !task.archived);
 
     const handleCreate = () => {
@@ -61,6 +63,14 @@ export const Dashboard = () => {
                 Mis Tareas
             </h1>
 
+            <ProductivityCards
+                tasks={tasks}
+            />
+
+            <ProductivitySummary
+                tasks={tasks}
+            />
+
             <TaskForm
                 onCreate={addTask}
             />
@@ -80,6 +90,7 @@ export const Dashboard = () => {
                         onStartTimer={startTimer}
                         onPauseTimer={pauseTimer}
                         onAddAttachment={addAttachment}
+                        onToggleStatus={toggleTaskStatus}
                     />
 
                 ))

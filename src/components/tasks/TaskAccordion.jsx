@@ -12,7 +12,8 @@ export const TaskAccordion = ({
     onAddComment,
     onStartTimer,
     onPauseTimer,
-    onAddAttachment
+    onAddAttachment,
+    onToggleStatus
 }) => {
 
     const [open, setOpen] =
@@ -181,9 +182,32 @@ export const TaskAccordion = ({
                                     <p>
                                         Estado:
                                         {" "}
-                                        {task.status}
+                                        {task.status === "completed"
+                                            ? "✅ Completada"
+                                            : "🕒 Pendiente"
+                                        }
                                         
                                     </p>
+
+                                    <button
+                                        className={
+                                            task.status === "completed"
+                                                ? "btn-secondary"
+                                                : "btn-primary"
+                                        }
+                                        onClick={() =>
+                                            onToggleStatus(
+                                                task.id,
+                                                task.status
+                                            )
+                                        }
+                                    >
+                                        {
+                                            task.status === "completed"
+                                                ? "Reabrir tarea"
+                                                : "Completar tarea"
+                                        }
+                                    </button>
 
                                     <TimerDisplay task={task} />
                                         {

@@ -60,6 +60,32 @@ export const useTasks = () => {
         await updateDoc(taskRef, updatedData);
     };
 
+    const toggleTaskStatus = async (taskId, currentStatus) => {
+
+        const taskRef = doc(
+            db,
+            `users/${currentUser.uid}/tasks`,
+            taskId
+        );
+
+        await updateDoc(taskRef, {
+
+            status:
+                currentStatus === "completed"
+                    ? "pending"
+                    : "completed",
+
+            completedAt:
+                currentStatus === "completed"
+                    ? null
+                    : new Date(),
+
+            updatedAt:
+                new Date()
+
+        });
+    };
+
     const deleteTask = async (taskId) => {
         const taskRef = doc(db, `users/${currentUser.uid}/tasks`, taskId);
         await deleteDoc(taskRef);
@@ -197,5 +223,5 @@ export const useTasks = () => {
         });
     };
 
-    return { tasks, addTask, updateTask, deleteTask, archiveTask, addComment, startTimer, pauseTimer, addAttachment};
+    return { tasks, addTask, updateTask, deleteTask, archiveTask, addComment, startTimer, pauseTimer, addAttachment,  toggleTaskStatus};
 };
