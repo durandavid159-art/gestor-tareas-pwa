@@ -4,6 +4,9 @@ import {TaskAccordion} from '../components/tasks/TaskAccordion'
 import { CommentSection } from '../components/tasks/CommentSection'
 import {ProductivitySummary} from '../components/reports/ProductivitySummary'
 import {ProductivityCards} from '../components/reports/ProductivityCards'
+import { ReportExport } from '../components/reports/ReportExport'
+import { ExcelExport } from '../components/reports/ExcelExport'
+import { PdfExport } from '../components/reports/PdfExport'
 import Swal from 'sweetalert2';
 import "../styles/Auth.css"
 
@@ -71,15 +74,26 @@ export const Dashboard = () => {
                 tasks={tasks}
             />
 
-            <TaskForm
-                onCreate={addTask}
-            />
+            <div
+                style={{
+                    display: "flex",
+                    gap: "10px",
+                    marginBottom: "20px",
+                    flexWrap: "wrap"
+                }}
+            >
+                <ReportExport />
+
+                <ExcelExport />
+
+                <PdfExport />
+            </div>
+
+            <TaskForm onCreate={addTask}/>
 
             <br />
 
-            {
-                activeTasks.map(task => (
-
+            {activeTasks.map(task => (
                     <TaskAccordion
                         key={task.id}
                         task={task}
