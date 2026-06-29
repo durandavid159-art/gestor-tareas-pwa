@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
-import { CommentSection } from "./CommentSection"
-import { TimerDisplay } from "./TimerDisplay"
+import { CommentSection } from "./CommentSection";
+import { TimerDisplay } from "./TimerDisplay";
+import {AttachmentSection} from "./AttachmentSection"
 
 export const TaskAccordion = ({
     task,
@@ -10,7 +11,8 @@ export const TaskAccordion = ({
     onUpdate,
     onAddComment,
     onStartTimer,
-    onPauseTimer
+    onPauseTimer,
+    onAddAttachment
 }) => {
 
     const [open, setOpen] =
@@ -180,8 +182,10 @@ export const TaskAccordion = ({
                                         Estado:
                                         {" "}
                                         {task.status}
+                                        
+                                    </p>
 
-                                        <TimerDisplay task={task} />
+                                    <TimerDisplay task={task} />
                                         {
                                             task.timerRunning
                                             ? (
@@ -206,8 +210,6 @@ export const TaskAccordion = ({
                                             )
                                         }
                                         
-                                    </p>
-
                                     <hr />
 
                                     <CommentSection
@@ -250,6 +252,18 @@ export const TaskAccordion = ({
                                     >
                                         Eliminar
                                     </button>
+
+                                    <hr />
+
+                                    <AttachmentSection
+
+                                        attachments={task.attachments}
+
+                                        onUpload={(file) =>
+                                            onAddAttachment(task.id, file)
+                                        }
+
+                                    />
 
                                 </>
 

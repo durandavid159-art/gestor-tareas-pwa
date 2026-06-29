@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, query, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../services/firebaseConfig';
+import { uploadFileToCloudinary} from '../services/cloudinaryConfig';
 import { useAuth } from '../context/AuthContext';
 import {v4 as uuidv4} from "uuid";
 
@@ -170,5 +171,31 @@ export const useTasks = () => {
         });
     };
 
-    return { tasks, addTask, updateTask, deleteTask, archiveTask, addComment, startTimer, pauseTimer};
+    const addAttachment = async (taskId, file) => {
+
+        const uploaded = await uploadFileToCloudinary(file);
+
+        const task = tasks.find(t => t.id === taskId);
+
+        if (!task) return;
+
+        const taskRef =
+            doc(
+                db,
+                `users/${currentUser.uid}/tasks`,
+                taskId
+            );
+
+        await updateDoc(taskRef, {
+
+            attachments: [
+                ...(task.attachments || []),
+                uploaded
+            ],
+
+            updatedAt: new Date()
+        });
+    };
+
+    return { tasks, addTask, updateTask, deleteTask, archiveTask, addComment, startTimer, pauseTimer, addAttachment};
 };
