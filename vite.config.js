@@ -8,6 +8,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      
       manifest: {
         name: 'Gestor de Tareas Personal',
         short_name: 'TaskPWA',
@@ -15,6 +16,10 @@ export default defineConfig({
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone', 
+
+        start_url: '/',
+        scope: '/',
+
         icons: [
           {
             src: 'pwa-192x192.png', 
@@ -28,7 +33,12 @@ export default defineConfig({
             purpose: 'any maskable'
           }
         ]
+      },
+
+      workbox: {
+        navigateFallback: '/index.html'
       }
+
     })
   ]
 })
