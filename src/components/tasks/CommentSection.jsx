@@ -77,7 +77,7 @@ export const CommentSection = ({
 
             </div>
 
-            <input
+            <input  className="task-input"
                 type="text"
                 placeholder="Escribe un comentario..."
                 value={comment}

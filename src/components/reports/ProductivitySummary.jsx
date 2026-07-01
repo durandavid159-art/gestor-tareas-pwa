@@ -53,13 +53,7 @@ export const ProductivitySummary = ({ tasks }) => {
 
     return (
 
-        <div
-            className="glass-card"
-            style={{
-                padding: "20px",
-                marginBottom: "20px"
-            }}
-        >
+        <div className="glass-card">
 
             <h2>
                 Resumen General

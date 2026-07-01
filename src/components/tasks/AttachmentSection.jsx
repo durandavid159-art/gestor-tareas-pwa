@@ -74,8 +74,7 @@ export const AttachmentSection = ({attachments = [], onUpload}) => {
 
             </div>
 
-            <input
-
+            <input  className="task-input"
                 type="file"
                 accept="image/*,.pdf"
                 onChange={(e) => {

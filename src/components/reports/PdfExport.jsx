@@ -53,7 +53,7 @@ export const PdfExport = () => {
     return (
 
         <button
-            className="btn-secondary"
+            className="btn-primary"
             onClick={exportPDF}
         >
             Exportar PDF

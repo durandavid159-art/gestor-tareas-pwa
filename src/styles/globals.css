@@ -4,6 +4,15 @@
     box-sizing:border-box;
 }
 
+h1, h2, h3 {
+    letter-spacing: 0.3px;
+}
+
+p {
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
 :root{
 
     --bg-primary:#0F172A;
@@ -20,18 +29,33 @@
     --radius:20px;
 }
 
-body{
-
-    font-family:'Segoe UI',sans-serif;
-
-    min-height:100vh;
+body {
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    color: var(--text);
 
     background:
-        linear-gradient(
-            135deg,
-            var(--bg-primary),
-            var(--bg-secondary)
-        );
+        radial-gradient(circle at 10% 20%, rgba(56,189,248,.15), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(99,102,241,.15), transparent 45%),
+        linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+}
 
-    color:var(--text);
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+
+    background: url("https://www.transparenttextures.com/patterns/cubes.png");
+    opacity: 0.03;
+}
+
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 25px;
+    }
+
+    .glass-card {
+        padding: 15px;
+    }
 }

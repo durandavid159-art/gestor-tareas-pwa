@@ -62,9 +62,12 @@ export const Dashboard = () => {
     return (
         <div className="glass-container">
 
-            <h1>
-                Mis Tareas
-            </h1>
+            <div className="dashboard-header">
+                <h1>Mis Tareas</h1>
+                <p>
+                    Organiza, gestiona y mide tu productividad
+                </p>
+            </div>
 
             <ProductivityCards
                 tasks={tasks}

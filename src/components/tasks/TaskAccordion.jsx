@@ -2,7 +2,8 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { CommentSection } from "./CommentSection";
 import { TimerDisplay } from "./TimerDisplay";
-import {AttachmentSection} from "./AttachmentSection"
+import {AttachmentSection} from "./AttachmentSection";
+import '../../styles/tasks.css';
 
 export const TaskAccordion = ({
     task,
@@ -81,213 +82,200 @@ export const TaskAccordion = ({
 
     return (
 
-        <div
-            className="glass-card"
-            style={{
-                marginBottom: "15px",
-                padding: "15px"
-            }}
-        >
+        <div className="task-card">
 
-            <div
-                onClick={() =>
-                    setOpen(!open)
-                }
-                style={{
-                    cursor: "pointer"
-                }}
+            <div className="task-header"
+                onClick={() => setOpen(!open)}
             >
 
-                <h3>
+                <h3 className="task-title">
                     {task.title}
                 </h3>
 
+                <span className="task-chevron">
+                    {open ? "▲" : "▼"}
+                </span>
+
             </div>
-
             {
-
                 open && (
-
-                    <div>
-
+                    <div className="task-content">
                         {
-
                             editing ? (
 
                                 <>
+                                    <div className="task-edit-form">
 
-                                    <input
-                                        type="text"
-                                        value={title}
-                                        onChange={(e) =>
-                                            setTitle(
-                                                e.target.value
-                                            )
-                                        }
-                                    />
+                                        <input  className="task-input"
+                                            type="text"
+                                            value={title}
+                                            onChange={(e) =>
+                                                setTitle(
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
 
-                                    <br />
-                                    <br />
+                                        <input  className="task-input"
+                                            type="text"
+                                            value={description}
+                                            onChange={(e) =>
+                                                setDescription(
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
 
-                                    <input
-                                        type="text"
-                                        value={description}
-                                        onChange={(e) =>
-                                            setDescription(
-                                                e.target.value
-                                            )
-                                        }
-                                    />
+                                        <input  className="task-input"
+                                            type="number"
+                                            value={estimatedTime}
+                                            onChange={(e) =>
+                                                setEstimatedTime(
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
 
-                                    <br />
-                                    <br />
-
-                                    <input
-                                        type="number"
-                                        value={estimatedTime}
-                                        onChange={(e) =>
-                                            setEstimatedTime(
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-
-                                    <br />
-                                    <br />
-
-                                    <button
-                                        className="btn-primary"
-                                        onClick={handleSave}
-                                    >
-                                        Guardar
-                                    </button>
-
+                                        <button
+                                            className="btn-primary"
+                                            onClick={handleSave}
+                                        >
+                                            Guardar
+                                        </button>
+                                    </div>
                                 </>
 
                             ) : (
 
                                 <>
 
-                                    <p>
+                                    <p className="task-description">
                                         {task.description}
                                     </p>
 
-                                    <p>
-                                        Tiempo estimado:
-                                        {" "}
-                                        {task.estimatedTime}
-                                        {" "}min
-                                    </p>
+                                    <div className="task-meta">
 
-                                    <p>
-                                        Estado:
-                                        {" "}
-                                        {task.status === "completed"
-                                            ? "✅ Completada"
-                                            : "🕒 Pendiente"
-                                        }
-                                        
-                                    </p>
+                                        <span> Tiempo estimado: 
+                                            {task.estimatedTime} min
+                                        </span>
 
-                                    <button
-                                        className={
-                                            task.status === "completed"
-                                                ? "btn-secondary"
-                                                : "btn-primary"
-                                        }
-                                        onClick={() =>
-                                            onToggleStatus(
-                                                task.id,
-                                                task.status
-                                            )
-                                        }
-                                    >
-                                        {
-                                            task.status === "completed"
-                                                ? "Reabrir tarea"
-                                                : "Completar tarea"
-                                        }
-                                    </button>
+                                        <div
+                                            className={
+                                                task.status === "completed"
+                                                    ? "status-badge status-completed"
+                                                    : "status-badge status-pending"
+                                            }
+                                        >
+                                            {   
+                                                task.status === "completed"
+                                                    ? "✅ Completada"
+                                                    : "🕒 Pendiente"
+                                            }
+                                        </div>
 
-                                    <TimerDisplay task={task} />
+                                    </div>
+
+                                    <div className="task-timer">
+                                        <TimerDisplay task={task} />
+                                    </div>
+
+                                    <div className="task-actions">
+
+                                        <button
+                                            className={
+                                                task.status === "completed"
+                                                    ? "btn-secondary"
+                                                    : "btn-primary"
+                                            }
+                                            onClick={() =>
+                                                onToggleStatus(
+                                                    task.id,
+                                                    task.status
+                                                )
+                                            }
+                                        >
+                                            {
+                                                task.status === "completed"
+                                                    ? "Reabrir tarea"
+                                                    : "Completar tarea"
+                                            }
+                                        </button>
+
                                         {
                                             task.timerRunning
                                             ? (
                                                 <button
-                                                className="btn-secondary"
-                                                onClick={() =>
-                                                    onPauseTimer(task.id)
-                                                }
+                                                    className="btn-secondary"
+                                                    onClick={() =>
+                                                        onPauseTimer(task.id)
+                                                    }
                                                 >
-                                                Pausar
+                                                    Pausar
                                                 </button>
                                             )
                                             : (
                                                 <button
-                                                className="btn-primary"
-                                                onClick={() =>
-                                                    onStartTimer(task.id)
-                                                }
+                                                    className="btn-primary"
+                                                    onClick={() =>
+                                                        onStartTimer(task.id)
+                                                    }
                                                 >
-                                                Iniciar
+                                                    Iniciar
                                                 </button>
                                             )
                                         }
+
+                                    </div>
                                         
-                                    <hr />
+                                    <div className="task-section">
+                                        <CommentSection
+                                            comments={task.comments}
+                                            onAddComment={(comment) =>
+                                                onAddComment(
+                                                    task.id,
+                                                    comment
+                                                )
+                                            }
+                                        />
+                                    </div>   
+                                                                    
+                                    <div className="task-actions">
+                                        <button
+                                            className="btn-secondary"
+                                            onClick={() =>
+                                                setEditing(true)
+                                            }
+                                        >
+                                            Editar
+                                        </button>
 
-                                    <CommentSection
-                                    comments={task.comments}
-                                        onAddComment={(comment) =>
-                                            onAddComment(
-                                                task.id,
-                                                comment
-                                            )
-                                    }
-                                    />
-                                    
-                                    <button
-                                        className="btn-secondary"
-                                        onClick={() =>
-                                            setEditing(true)
-                                        }
-                                    >
-                                        Editar
-                                    </button>
+                                        <button
+                                            className="btn-secondary"
+                                            onClick={() =>
+                                                onArchive(task.id)
+                                            }
+                                        >
+                                            Archivar
+                                        </button>
 
-                                    {" "}
+                                        <button
+                                            className="btn-primary"
+                                            onClick={() =>
+                                                onDelete(task.id)
+                                            }
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </div>
 
-                                    <button
-                                        className="btn-secondary"
-                                        onClick={() =>
-                                            onArchive(task.id)
-                                        }
-                                    >
-                                        Archivar
-                                    </button>
-
-                                    {" "}
-
-                                    <button
-                                        className="btn-primary"
-                                        onClick={() =>
-                                            onDelete(task.id)
-                                        }
-                                    >
-                                        Eliminar
-                                    </button>
-
-                                    <hr />
-
-                                    <AttachmentSection
-
-                                        attachments={task.attachments}
-
-                                        onUpload={(file) =>
-                                            onAddAttachment(task.id, file)
-                                        }
-
-                                    />
+                                    <div className="task-section">
+                                        <AttachmentSection
+                                            attachments={task.attachments}
+                                            onUpload={(file) =>
+                                                onAddAttachment(task.id, file)
+                                            }
+                                        />
+                                    </div>
 
                                 </>
 
